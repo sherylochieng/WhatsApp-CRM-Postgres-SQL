@@ -180,3 +180,10 @@ CREATE INDEX idx_leads_status ON leads(status);
 CREATE INDEX idx_leads_created_at ON leads(created_at DESC);
 CREATE INDEX idx_leads_assigned_to ON leads(assigned_to);
 CREATE INDEX idx_messages_lead_id ON messages(lead_id);
+
+-- BEGIN;
+-- ALTER TABLE leads ADD COLUMN channel TEXT NOT NULL DEFAULT 'whatsapp'
+--   CHECK (channel IN ('whatsapp', 'ussd', 'web'));
+-- ALTER TABLE leads ADD COLUMN category TEXT;
+-- CREATE INDEX idx_leads_channel ON leads(channel);
+-- COMMIT;
