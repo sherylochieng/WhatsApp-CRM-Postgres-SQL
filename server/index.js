@@ -27,6 +27,9 @@ app.use("/webhook", webhookRoutes);                // <-- still public (Meta cal
 //ADDED
 app.use("/api/users", requireAuth, usersRoutes);  // <-- protected!
 
+//ussd added routes
+app.use("/ussd", require("./routes/ussd.routes"));
+
 app.use(errorHandler);
 
 app.listen(env.PORT, () => {
