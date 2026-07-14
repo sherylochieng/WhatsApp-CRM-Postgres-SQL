@@ -20,4 +20,54 @@ async function destroy(sessionId) {
   await client.del(key(sessionId));
 }
 
-module.exports = { get, set, destroy };
+// server/services/ussd/session.js
+// Add:
+const DRAFT_TTL = 600;
+const draftKey = (phone) => `ussd:draft:${phone}`;
+
+async function saveDraft(phone, data) {
+  const client = await getClient();
+  await client.set(draftKey(phone), JSON.stringify(data), { EX: DRAFT_TTL });
+}
+
+async function getDraft(phone) {
+  const client = await getClient();
+  const raw = await client.get(draftKey(phone));
+  return raw ? JSON.parse(raw) : null;
+}
+
+async function clearDraft(phone) {
+  const client = await getClient();
+  await client.del(draftKey(phone));
+}
+
+module.exports = { get, set, destroy, saveDraft, getDraft, clearDraft };
+
+
+
+
+// module.exports = { get, set, destroy };
+
+
+// // server/services/ussd/session.js
+// // Add:
+// const DRAFT_TTL = 600;
+// const draftKey = (phone) => `ussd:draft:${phone}`;
+
+// async function saveDraft(phone, data) {
+//   const client = await getClient();
+//   await client.set(draftKey(phone), JSON.stringify(data), { EX: DRAFT_TTL });
+// }
+
+// async function getDraft(phone) {
+//   const client = await getClient();
+//   const raw = await client.get(draftKey(phone));
+//   return raw ? JSON.parse(raw) : null;
+// }
+
+// async function clearDraft(phone) {
+//   const client = await getClient();
+//   await client.del(draftKey(phone));
+// }
+
+// module.exports = { get, set, destroy, saveDraft, getDraft, clearDraft };
